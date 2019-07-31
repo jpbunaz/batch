@@ -21,6 +21,7 @@
 
   <modules>
     <module>batch-core</module>
+    <module>batch-extensions-io</module>
   </modules>
 
   <dependencies>

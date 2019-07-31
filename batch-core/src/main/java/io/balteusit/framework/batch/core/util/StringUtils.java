@@ -17,4 +17,12 @@ public class StringUtils {
     return buffer.toString();
   }
 
+  public static boolean isNullOrEmpty(String string) {
+    return !isNotNullOrEmpty(string);
+  }
+
+  public static boolean isNotNullOrEmpty(String string) {
+    return string != null && string.trim().length() > 0;
+  }
+
 }

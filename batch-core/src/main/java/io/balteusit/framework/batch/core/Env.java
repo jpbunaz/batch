@@ -4,31 +4,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class Env {
 
-  private Map<String, String> parameters;
+  private Map<String, Object> sessions = new HashMap<>();
 
-  @SuppressWarnings("unchecked")
-  private Map<String, Object> sessions = new HashMap();
+  private Logger logger;
 
-  private int currentLine = 0;
+  public Env() {
 
-  private final Logger logger;
-
-  public Env(Map<String, String> parameters, Class loggerClass) {
-    this.parameters = parameters;
-    this.logger = LoggerFactory.getLogger(loggerClass);
-  }
-
-  public Env(Map<String, String> parameters, String loggerName) {
-    this.parameters = parameters;
-    this.logger = LoggerFactory.getLogger(loggerName);
-  }
-
-  public Optional<String> getParameter(String key) {
-    return Optional.ofNullable(parameters.get(key));
   }
 
   public Optional<Object> getSession(String key) {
@@ -43,16 +27,7 @@ public class Env {
     return logger;
   }
 
-  public int getCurrentLine() {
-    return currentLine;
+  public void setLogger(Logger logger) {
+    this.logger = logger;
   }
-
-  public void setCurrentLine(int currentLine) {
-    this.currentLine = currentLine;
-  }
-
-  public static void main(String[] args) {
-    System.out.println(Env.class.getPackage().getName());
-  }
-
 }

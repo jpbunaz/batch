@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <changeSet id="test" author="jpb">
+
+    <insert tableName="executable">
+      <column name="id" valueComputed="NEXT VALUE FOR hibernate_sequence"/>
+      <column name="className" value="io.balteusit.framework.batch.execute.service.ExecutableExample2"/>
+      <column name="name" value="ExecutableExample2"/>
+      <column name="asynchronous" value="false"/>
+      <column name="active" value="true"/>
+    </insert>
+
+    <insert tableName="executable">
+      <column name="id" valueComputed="NEXT VALUE FOR hibernate_sequence"/>
+      <column name="className" value="io.balteusit.framework.batch.execute.service.ExecutableExample1"/>
+      <column name="name" value="ExecutableExample1"/>
+      <column name="asynchronous" value="false"/>
+      <column name="active" value="true"/>
+    </insert>
+
+    <insert tableName="executable">
+      <column name="id" valueComputed="NEXT VALUE FOR hibernate_sequence"/>
+      <column name="className" value="io.balteusit.framework.batch.execute.service.ExecutableExample6"/>
+      <column name="name" value="ExecutableExample6"/>
+      <column name="asynchronous" value="true"/>
+      <column name="active" value="false"/>
+    </insert>
+
+    <insert tableName="executable">
+      <column name="id" valueComputed="NEXT VALUE FOR hibernate_sequence"/>
+      <column name="className" value="io.balteusit.framework.batch.execute.service.ExecutableExample4"/>
+      <column name="name" value="ExecutableExample4"/>
+      <column name="asynchronous" value="true"/>
+      <column name="active" value="true"/>
+    </insert>
+
+    <insert tableName="execution">
+      <column name="id" valueComputed="NEXT VALUE FOR hibernate_sequence"/>
+      <column name="startDate" valueDate="2019-10-06T20:56:27"/>
+      <column name="endDate" valueDate="2019-10-06T21:22:12"/>
+      <column name="status" value="SUCCESS"/>
+      <column name="executable_id" valueComputed="(select id from executable where className = 'io.balteusit.framework.batch.execute.service.ExecutableExample4')"/>
+      <column name="log" value="this is a log for job 4"/>
+    </insert>
+
+    <insert tableName="execution">
+      <column name="id" valueComputed="NEXT VALUE FOR hibernate_sequence"/>
+      <column name="startDate" valueDate="2019-10-07T20:56:27"/>
+      <column name="status" value="RUNNING"/>
+      <column name="executable_id" valueComputed="(select id from executable where className = 'io.balteusit.framework.batch.execute.service.ExecutableExample4')"/>
+      <column name="log" value="this is a log for job 4 2"/>
+    </insert>
+
+    <insert tableName="executable">
+      <column name="id" valueComputed="NEXT VALUE FOR hibernate_sequence"/>
+      <column name="className" value="io.balteusit.framework.batch.execute.service.ExecutableExample5"/>
+      <column name="name" value="ExecutableExample5"/>
+      <column name="asynchronous" value="true"/>
+      <column name="active" value="true"/>
+    </insert>
+
+    <insert tableName="execution">
+      <column name="id" valueComputed="NEXT VALUE FOR hibernate_sequence"/>
+      <column name="startDate" valueDate="2019-11-09T18:17:42"/>
+      <column name="status" value="SUCCESS"/>
+      <column name="executable_id" valueComputed="(select id from executable where className = 'io.balteusit.framework.batch.execute.service.ExecutableExample5')"/>
+      <column name="log" value="this is a log for job 5"/>
+    </insert>
+
+  </changeSet>
+
+</databaseChangeLog>

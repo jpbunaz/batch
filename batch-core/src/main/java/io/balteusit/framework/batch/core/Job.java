@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Job {
 
@@ -25,10 +26,14 @@ public class Job {
 
   private final String name;
 
+  private final Env env;
+
   private Process failedCallBack;
 
   public Job(String name) {
     this.name = name;
+    this.env = new Env();
+    this.env.setLogger(LoggerFactory.getLogger(name));
   }
 
   public Job addProcess(Process... process) {
@@ -42,7 +47,7 @@ public class Job {
   }
 
   @SuppressWarnings("unchecked")
-  public void start(Env env) {
+  public void start() {
     Logger logger = env.getLogger();
     logger.info(format(LOG_JOB_START, name));
     boolean toContinue = true;

@@ -136,7 +136,6 @@ public abstract class ComposableProcess<E, T, G extends Env> implements Process<
       Optional<E> source;
       while ((source = executeRead(env)).isPresent()) {
         currentLine++;
-        env.setCurrentLine(currentLine);
         boolean isFiltered = executeFilter(source.get(), env);
         if (isFiltered) {
           processLine++;

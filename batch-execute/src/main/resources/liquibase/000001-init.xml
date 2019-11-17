@@ -26,6 +26,9 @@
       <column name="active" type="boolean">
         <constraints nullable="false"/>
       </column>
+      <column name="jobClass" type="varchar(300)">
+        <constraints nullable="true"/>
+      </column>
     </createTable>
 
     <createTable tableName="execution">

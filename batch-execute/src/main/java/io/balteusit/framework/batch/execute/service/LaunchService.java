@@ -1,9 +1,13 @@
 package io.balteusit.framework.batch.execute.service;
 
 import io.balteusit.framework.batch.core.BatchProperties;
+import io.balteusit.framework.batch.core.Job;
 import io.balteusit.framework.batch.execute.domain.ExecutableInterface;
+import io.balteusit.framework.batch.execute.domain.ExecutableJob;
 import io.balteusit.framework.batch.execute.domain.Execution;
 import io.balteusit.framework.batch.execute.domain.ExecutionStatus;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -42,9 +46,16 @@ public class LaunchService {
       ExecutableInterface executableInterface;
       try {
         Class<ExecutableInterface> aClass = (Class<ExecutableInterface>) Class.forName(id);
-        executableInterface = aClass.newInstance();
-      } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-        logger.error(e.getMessage());
+        if (id.equals(ExecutableJob.class.getName())) {
+          String jobClassName = executable.getJobClass();
+          Job job = (Job) Class.forName(jobClassName).newInstance();
+          Constructor<?> ctor = aClass.getConstructor(Job.class);
+          executableInterface = (ExecutableInterface) ctor.newInstance(job);
+        } else {
+          executableInterface = aClass.newInstance();
+        }
+      } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+        logger.error(String.format("Error while start executable %s", id), e);
         return ExecutionStatus.START_FAILED;
       }
 

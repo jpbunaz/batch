@@ -20,7 +20,16 @@ public class Executable {
 
   private boolean active;
 
+  private String jobClass;
+
   public Executable() {
+  }
+
+  public Executable(String className, String name, boolean asynchronous, boolean active) {
+    this.className = className;
+    this.name = name;
+    this.asynchronous = asynchronous;
+    this.active = active;
   }
 
   public Executable(Long id, String className, String name, boolean asynchronous, boolean active) {
@@ -69,5 +78,13 @@ public class Executable {
 
   public void setActive(boolean active) {
     this.active = active;
+  }
+
+  public String getJobClass() {
+    return jobClass;
+  }
+
+  public void setJobClass(String jobName) {
+    this.jobClass = jobName;
   }
 }

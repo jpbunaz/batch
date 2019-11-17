@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
 import io.balteusit.framework.batch.execute.common.AbstractDatabaseTest;
+import io.balteusit.framework.batch.execute.domain.ExecutableJob;
 import io.balteusit.framework.batch.execute.domain.ExecutionStatus;
 import io.balteusit.framework.batch.execute.repository.ExecutableRepository;
 import java.sql.Connection;
@@ -20,7 +21,7 @@ class LaunchServiceTest extends AbstractDatabaseTest {
 
   @DisplayName("Launch an executable sync")
   @Test
-  @Order(1)
+  @Order(100)
   void launch() throws SQLException {
 
     Long executableId = getExecutableId(ExecutableExample1.class.getName());
@@ -37,7 +38,7 @@ class LaunchServiceTest extends AbstractDatabaseTest {
 
   @DisplayName("Launch an executable async")
   @Test
-  @Order(2)
+  @Order(200)
   void launchAsync() throws SQLException, ExecutionException, InterruptedException {
     Long executableId = getExecutableId(ExecutableExample2.class.getName());
 
@@ -51,6 +52,21 @@ class LaunchServiceTest extends AbstractDatabaseTest {
 
     checkExecutionFromExecutable(executableId);
 
+  }
+
+  @DisplayName("Launch a executable job")
+  @Test
+  @Order(300)
+  void launchExecutableJob() throws SQLException {
+    Long executableId = getExecutableId(ExecutableJob.class.getName());
+
+    LaunchService launchService = LaunchService.getInstance();
+
+    ExecutionStatus executionStatus = launchService.launch(executableId);
+
+    assertThat(executionStatus).isEqualTo(ExecutionStatus.SUCCESS);
+
+    checkExecutionFromExecutable(executableId);
   }
 
   private void checkExecutionFromExecutable(Long id) throws SQLException {

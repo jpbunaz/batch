@@ -12,6 +12,10 @@ public interface ExecutableInterface {
     return true;
   }
 
+  default boolean isAutoExecutable() {
+    return true;
+  }
+
   default Optional<String> getLog() {
     return Optional.empty();
   }

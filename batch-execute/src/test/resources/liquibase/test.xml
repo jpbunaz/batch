@@ -73,6 +73,15 @@
       <column name="log" value="this is a log for job 5"/>
     </insert>
 
+    <insert tableName="executable">
+      <column name="id" valueComputed="NEXT VALUE FOR hibernate_sequence"/>
+      <column name="className" value="io.balteusit.framework.batch.execute.domain.ExecutableJob"/>
+      <column name="name" value="Job Test"/>
+      <column name="asynchronous" value="true"/>
+      <column name="active" value="true"/>
+      <column name="jobClass" value="io.balteusit.framework.batch.execute.service.JobForTest"/>
+    </insert>
+
   </changeSet>
 
 </databaseChangeLog>

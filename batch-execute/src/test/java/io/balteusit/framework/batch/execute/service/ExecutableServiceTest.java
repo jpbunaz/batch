@@ -9,6 +9,9 @@ import static org.assertj.core.groups.Tuple.tuple;
 import io.balteusit.framework.batch.execute.common.AbstractDatabaseTest;
 import io.balteusit.framework.batch.execute.common.PageableList;
 import io.balteusit.framework.batch.execute.domain.Executable;
+import io.balteusit.framework.batch.execute.domain.ExecutableJob;
+import io.balteusit.framework.batch.execute.exception.NoJobClassExecutableJobException;
+import io.balteusit.framework.batch.execute.exception.NotExistingJobClassExecutableJobException;
 import io.balteusit.framework.batch.execute.exception.RemoveExecutableException;
 import io.balteusit.framework.batch.execute.repository.ExecutableRepository;
 import java.util.Optional;
@@ -22,16 +25,16 @@ import org.junit.jupiter.api.TestMethodOrder;
 public class ExecutableServiceTest extends AbstractDatabaseTest {
 
 
-  @DisplayName("Test find and executable has been register")
+  @DisplayName("Find and executable has been register")
   @Test
-  @Order(1)
+  @Order(100)
   public void testFindAndExecutable() {
     ExecutableService executableService = ExecutableService.getInstance();
 
     PageableList<Executable> executables = executableService
         .getExecutables(0, 4, new io.balteusit.framework.batch.execute.repository.Order("className", false));
 
-    assertThat(executables.getTotal()).isEqualTo(6l);
+    assertThat(executables.getTotal()).isEqualTo(7l);
     assertThat(executables.getPage()).isEqualTo(0);
     assertThat(executables.getSize()).isEqualTo(4);
 
@@ -44,9 +47,9 @@ public class ExecutableServiceTest extends AbstractDatabaseTest {
         );
   }
 
-  @DisplayName("Test get by id")
+  @DisplayName("Get by id")
   @Test
-  @Order(2)
+  @Order(200)
   public void testGetById() {
     Long id = ExecutableRepository.getInstance().findByClassName(ExecutableExample4.class.getName()).get(0).getId();
 
@@ -61,9 +64,9 @@ public class ExecutableServiceTest extends AbstractDatabaseTest {
         .hasFieldOrPropertyWithValue("active", true);
   }
 
-  @DisplayName("Test update executable")
+  @DisplayName("Update executable")
   @Test
-  @Order(3)
+  @Order(300)
   void testUpdateExecutable() {
 
     Long id = ExecutableRepository.getInstance().findByClassName(ExecutableExample1.class.getName()).get(0).getId();
@@ -80,9 +83,58 @@ public class ExecutableServiceTest extends AbstractDatabaseTest {
             new Executable(id, "io.balteusit.framework.batch.execute.service.ExecutableExample1", aNewName, true, false));
   }
 
-  @DisplayName("Test can't delete an executable with running execution")
+  @DisplayName("Create an executable job")
   @Test
-  @Order(4)
+  @Order(350)
+  void testCreateExecutableJob() {
+
+    Executable executable = new Executable(ExecutableJob.class.getName(), "My exectuable for test", true, true);
+    executable.setJobClass(JobForTest.class.getName());
+
+    ExecutableService executableService = ExecutableService.getInstance();
+    executableService.saveOrUpdate(executable);
+
+    Optional<Executable> executableBddOpt = executableService.getById(executable.getId());
+
+    assertThat(executableBddOpt)
+        .isPresent()
+        .get()
+        .isEqualToComparingFieldByField(executable);
+
+  }
+
+  @DisplayName("Can't create executable job without class")
+  @Test
+  @Order(360)
+  void testCreateExeccutableJobWithoutClassJob() {
+
+    Executable executable = new Executable(ExecutableJob.class.getName(), "My executable for test", true, true);
+
+    ExecutableService executableService = ExecutableService.getInstance();
+    Throwable throwable = catchThrowable(() -> executableService.saveOrUpdate(executable));
+
+    assertThat(throwable).isInstanceOf(NoJobClassExecutableJobException.class);
+
+  }
+
+  @DisplayName("Can't create executable job without not existing class")
+  @Test
+  @Order(370)
+  void testCreateExecutableJobWithNotExistingClassJob() {
+
+    Executable executable = new Executable(ExecutableJob.class.getName(), "My executable for test", true, true);
+    executable.setJobClass("not.existing.Class");
+
+    ExecutableService executableService = ExecutableService.getInstance();
+    Throwable throwable = catchThrowable(() -> executableService.saveOrUpdate(executable));
+
+    assertThat(throwable).isInstanceOf(NotExistingJobClassExecutableJobException.class);
+
+  }
+
+  @DisplayName("Can't delete an executable with running execution")
+  @Test
+  @Order(400)
   void testDeleteRunning() {
     Long id = ExecutableRepository.getInstance().findByClassName(ExecutableExample4.class.getName()).get(0).getId();
 
@@ -93,9 +145,9 @@ public class ExecutableServiceTest extends AbstractDatabaseTest {
     assertThat(throwable).isInstanceOf(RemoveExecutableException.class).hasMessage(MESSAGE_RUNNING_EXECUTION);
   }
 
-  @DisplayName("Test soft delete : Only Executable without execution")
+  @DisplayName("Soft delete : Only Executable without execution")
   @Test
-  @Order(5)
+  @Order(500)
   void testDeleteSoft() {
     Long id = ExecutableRepository.getInstance().findByClassName(ExecutableExample5.class.getName()).get(0).getId();
 
@@ -113,9 +165,9 @@ public class ExecutableServiceTest extends AbstractDatabaseTest {
     assertThat(executable).isNotPresent();
   }
 
-  @DisplayName("Test hard delete : Delete execution before executable")
+  @DisplayName("Hard delete : Delete execution before executable")
   @Test
-  @Order(6)
+  @Order(600)
   void testDeleteHard() {
     Long id = ExecutableRepository.getInstance().findByClassName(ExecutableExample5.class.getName()).get(0).getId();
 

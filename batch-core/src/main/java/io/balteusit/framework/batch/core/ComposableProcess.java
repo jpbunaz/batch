@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-public abstract class ComposableProcess<E, T, G extends Env> implements Process<G> {
+public class ComposableProcess<E, T, G extends Env> implements Process<G> {
 
   private class EmptyTransformer<E, T, G extends Env> implements Transformer<E, T, G> {
 

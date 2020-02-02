@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.fail;
 
 import io.balteusit.framework.batch.core.Env;
 import java.util.Date;
-import java.util.HashMap;
 import org.junit.jupiter.api.Test;
 
 public class BeanFilterTest {
@@ -96,8 +95,6 @@ public class BeanFilterTest {
     }
     fail("Should throw an exception");
   }
-
-
 
   private void checkFilter(BeanFilter<Cat> catBeanFilter, Cat cat, boolean expected) {
     Env env = new Env();

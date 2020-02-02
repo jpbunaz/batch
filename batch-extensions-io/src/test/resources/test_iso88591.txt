@@ -1,0 +1,4 @@
+Ce texte ne veut rien mais il
+doit être sur plusieurs lignes et
+il contient des accents pour être certains
+de bien pouvoir tester l'encodage du fichier
